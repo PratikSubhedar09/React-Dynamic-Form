@@ -4,36 +4,59 @@ class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      formData: {
-        email: null,
-        mobile: null,
-      },
-      formErrors: {
-        email: null,
-        mobile: null,
-      }
+      formData: {},
+      formErrors: {},
     };
     
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e) {
-    console.log('e', e);
-    console.log('target', e.target);
-    this.setState({value: e.target.value});
+    this.setState({
+      formData: {
+        ...this.state.formData,
+        [e.target.name]: e.target.value,
+      }
+    });
   }
-
-  handleSubmit(e) {
-    alert('A name was submitted: ' + this.state.value);
-    e.preventDefault();
+  
+  checkFormValidity(obj) {
+    for (var key in obj) {
+      if (obj[key] !== null && obj[key] != "")
+        return false;
+    }
+      return true;
   }
 
   render() {
-    const { props } = this;
+    const { props, state } = this;
+    const children = React.Children.map(props.children, child => React.cloneElement(child, {
+      onChange: (e) => {
+        this.handleChange(e);
+        if (child.props.validate) {
+          const error = child.props.validate(e.target.value);
+          this.setState({
+            formErrors: {
+              ...this.state.formErrors,
+              [child.props.name]: error,
+            },
+          });
+        }
+      },
+      value: state.formData[child.props.name],
+    }));
+    
+    const validForm = Object.keys(state.formErrors).length !== 0 && this.checkFormValidity(state.formErrors);
     return (
-      <form onSubmit={this.handleSubmit}>
-        {props.children}
+      <form onSubmit={(e) => {
+          e.preventDefault();
+          if (Object.keys(state.formErrors).length !== 0) {
+           props.onValidationError(state.formErrors); 
+          }
+          props.onSubmit(state.formData);
+        }}>
+        {children}
+        <input type="submit" disabled={!validForm} value="Submit" />
       </form>
     )
   }
