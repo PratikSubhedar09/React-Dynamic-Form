@@ -34,6 +34,7 @@ class Form extends React.Component {
     e.preventDefault();
     const errors = Object.assign({}, state.formErrors);
     props.children.forEach((child) => {
+      console.log('child', child);
       const childName = child.props.name;
       if (child.props.required && !(state.formData[childName] && state.formData[childName].trim())) {
         errors[childName] = `${child.props.label} is required!`;
