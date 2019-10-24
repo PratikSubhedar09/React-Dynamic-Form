@@ -51,3 +51,6 @@ form{
   padding:2px;
   font-size:10px;
 }
+.mandatory{
+  color:#ff0000;
+}
