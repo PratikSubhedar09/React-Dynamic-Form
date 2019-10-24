@@ -5,6 +5,9 @@ require('../styles.css');
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 const validMobileRegex = RegExp(/^\d{10}$/);
 
+const _ = require('lodash');
+React.__spread = _.assign;
+
 class Page extends React.Component {
 
   handleSubmit(d) {
@@ -32,12 +35,13 @@ class Page extends React.Component {
         <Form onSubmit={this.handleSubmit} onValidationError={this.handleValidationError}>
           <Input label="Email" name="email" validate={this.handleEmailValidation} required />
           <Input label="Mobile" name="mobile" validate={this.handleMobileValidation} required />
-          <FormDataConsumer>
-            {({ formData, ...rest }) => {
-              console.log('formData', formData);
-              return (
-                <Input label="Age" name="age" />
-              )
+          <FormDataConsumer label="Age" name="age" required >
+            {({ formData, ...rest}) => {
+              if (formData.email && formData.email.includes('gmail')) {
+                return (
+                  <Input {...rest} />
+                ) 
+              }
             }}
           </FormDataConsumer>
         </Form>

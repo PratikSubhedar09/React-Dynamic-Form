@@ -1,18 +1,15 @@
 const React = require('react');
 
-const FormDataConsumer = ({ children, formData }) => {
-  const newChildren = React.Children.map(children, child => {
-    console.log('child', child);
-    return React.cloneElement(child, {
-      formData: formData,
-    })
-  });
-  console.log('FormDataConsumer', newChildren);
-  return (
-    <React.Fragment>
-      {newChildren}
-    </React.Fragment>
-  );
+class FormDataConsumer extends React.Component {
+  render() {
+    const { props: { children, ...rest } } = this;
+    console.log('FormDataConsumer-rest', rest);
+    return (
+      <React.Fragment>
+        {children({...rest})}
+      </React.Fragment>
+    )
+  }
 };
 
 module.exports = FormDataConsumer;
