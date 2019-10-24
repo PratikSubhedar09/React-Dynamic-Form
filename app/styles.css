@@ -11,7 +11,7 @@
   font-weight:bold;
   color:#403f3f;
 }
-.form-input-row label , input{
+.form-input-row label ,.form-input-row input{
   width:100%;
   font-size:17px;
 }
@@ -45,4 +45,9 @@ form{
     left:0;
     right:0;
   
+}
+.error{
+  color:#ff0000;
+  padding:2px;
+  font-size:10px;
 }
