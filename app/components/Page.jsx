@@ -30,8 +30,8 @@ class Page extends React.Component {
     return (
       <div>
         <Form onSubmit={this.handleSubmit} onValidationError={this.handleValidationError}>
-          <Input label="Email" name="email" validate={this.handleEmailValidation} />
-          <Input label="Mobile" name="mobile" validate={this.handleMobileValidation} />
+          <Input label="Email" name="email" validate={this.handleEmailValidation} required />
+          <Input label="Mobile" name="mobile" validate={this.handleMobileValidation} required />
         </Form>
       </div>
     )

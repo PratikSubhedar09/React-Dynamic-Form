@@ -9,6 +9,7 @@ class Form extends React.Component {
     };
     
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e) {
@@ -26,6 +27,20 @@ class Form extends React.Component {
         return false;
     }
       return true;
+  }
+  
+  handleSubmit(e) {
+    const { props, state } = this;
+    e.preventDefault();
+    const errors = Object.assign({}, state.formErrors);
+    props.children.forEach((child) => {
+      const childName = child.props.name;
+      if (child.props.required && !(state.formData[childName] && state.formData[childName].trim())) {
+        errors[childName] = `${child.props.label} is required!`;
+      }
+    })
+    props.onValidationError(errors);
+    props.onSubmit(state.formData);
   }
 
   render() {
@@ -46,17 +61,11 @@ class Form extends React.Component {
       value: state.formData[child.props.name],
     }));
     
-    const validForm = Object.keys(state.formErrors).length !== 0 && this.checkFormValidity(state.formErrors);
+    // const validForm = Object.keys(state.formErrors).length === children.length && this.checkFormValidity(state.formErrors);
     return (
-      <form onSubmit={(e) => {
-          e.preventDefault();
-          if (Object.keys(state.formErrors).length !== 0) {
-           props.onValidationError(state.formErrors); 
-          }
-          props.onSubmit(state.formData);
-        }}>
+      <form onSubmit={this.handleSubmit}>
         {children}
-        <input type="submit" disabled={!validForm} value="Submit" />
+        <input type="submit" value="Submit" />
       </form>
     )
   }
