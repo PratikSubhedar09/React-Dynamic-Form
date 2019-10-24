@@ -1,5 +1,6 @@
 const React = require('react');
 const { Form, Input, FormDataConsumer } = require('./FormLib');
+require('../styles.css');
 
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 const validMobileRegex = RegExp(/^\d{10}$/);
@@ -27,7 +28,7 @@ class Page extends React.Component {
   render() {
     const { props } = this;
     return (
-      <div>
+      <div className="container">
         <Form onSubmit={this.handleSubmit} onValidationError={this.handleValidationError}>
           <Input label="Email" name="email" validate={this.handleEmailValidation} required />
           <Input label="Mobile" name="mobile" validate={this.handleMobileValidation} required />

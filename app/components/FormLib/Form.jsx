@@ -60,6 +60,7 @@ class Form extends React.Component {
         }
       },
       value: state.formData[child.props.name],
+      formData: state.formData,
     }));
     
     // const validForm = Object.keys(state.formErrors).length === children.length && this.checkFormValidity(state.formErrors);

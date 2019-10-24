@@ -1,9 +1,13 @@
 const React = require('react');
 
 const FormDataConsumer = ({ children, formData }) => {
-  const newChildren = React.Children.map(children, child => React.cloneElement(child, {
-    formData: formData,
-  }));
+  const newChildren = React.Children.map(children, child => {
+    console.log('child', child);
+    return React.cloneElement(child, {
+      formData: formData,
+    })
+  });
+  console.log('FormDataConsumer', newChildren);
   return (
     <React.Fragment>
       {newChildren}
