@@ -17,6 +17,10 @@ class Form extends React.Component {
       formData: {
         ...this.state.formData,
         [e.target.name]: e.target.value,
+      },
+      formErrors: {
+        ...this.state.formErrors,
+        [e.target.name]: null,
       }
     });
   }
@@ -34,32 +38,27 @@ class Form extends React.Component {
     e.preventDefault();
     const errors = Object.assign({}, state.formErrors);
     props.children.forEach((child) => {
-      console.log('child', child);
       const childName = child.props.name;
       if (child.props.required && !(state.formData[childName] && state.formData[childName].trim())) {
         errors[childName] = `${child.props.label} is required!`;
+      } else if (child.props.validate) {
+        errors[childName] = child.props.validate(state.formData[childName]);
       }
     })
-    props.onValidationError(errors);
-    props.onSubmit(state.formData);
+    this.setState({
+      formErrors: errors,
+    }, () => {
+      props.onValidationError(errors);
+      props.onSubmit(state.formData);
+    })
   }
 
   render() {
     const { props, state } = this;
     const children = React.Children.map(props.children, child => React.cloneElement(child, {
-      onChange: (e) => {
-        this.handleChange(e);
-        if (child.props.validate) {
-          const error = child.props.validate(e.target.value);
-          this.setState({
-            formErrors: {
-              ...this.state.formErrors,
-              [child.props.name]: error,
-            },
-          });
-        }
-      },
+      onChange: this.handleChange,
       value: state.formData[child.props.name],
+      error: state.formErrors[child.props.name],
       formData: state.formData,
     }));
     
